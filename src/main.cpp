@@ -17,8 +17,9 @@ void setup() {
 
 void loop() {
 
-    if (rdm6300Serial.available()) {
-        Serial.println("Available");
+    if (rdm6300Serial.available() > 0) {
+        int byte = rdm6300Serial.read();
+        Serial.println(byte);
     }
 
 }
