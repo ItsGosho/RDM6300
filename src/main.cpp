@@ -23,12 +23,20 @@ void loop() {
     byte rdm6300Bytes[12];
     SerialUtils::readBytesPortion(rdm6300Serial, 2, 3, rdm6300Bytes);
 
-    char asciiData[8];
-    for (int i = 2; i < 10; ++i) {
-        asciiData[i - 2] = rdm6300Bytes[i];
+    char versionData[2];
+    for (int i = 0; i < 2; ++i) {
+        versionData[i] = rdm6300Bytes[i];
     }
 
+    char tagData[8];
+    for (int i = 2; i < 10; ++i) {
+        tagData[i - 2] = rdm6300Bytes[i];
+    }
 
-    Serial.println(GenericUtils::convertHexToDecimal(asciiData));
+    Serial.println("Tag:");
+    Serial.println(GenericUtils::convertHexToDecimal(tagData));
+
+    Serial.println("Version:");
+    Serial.println(versionData);
 
 }
