@@ -8,6 +8,30 @@
 
 SoftwareSerial rdm6300Serial(RDM6300_TX_PIN, RDM6300_RX_PIN);
 
+unsigned long pow(const int& number, const int& exponent) {
+
+    unsigned long result = 1;
+
+    for (int i = 0; i < exponent; ++i)
+        result *= number;
+
+    return result;
+}
+
+template<size_t S>
+unsigned long convertHexToDecimal(char (& hex)[S]) {
+
+    size_t exponent = 0;
+    unsigned long result = 0;
+
+    for (int i = S - 1; i >= 0; i--) {
+        result += (hex[i] - 48) * pow(16, exponent);
+        exponent++;
+    }
+
+    return result;
+}
+
 void setup() {
     Serial.begin(SERIAL_BAUD_RATE);
 
@@ -16,47 +40,20 @@ void setup() {
     rdm6300Serial.begin(SERIAL_BAUD_RATE);
 }
 
-byte data[12];
-
 void loop() {
 
     //SerialUtils::readBytesPortion(rdm6300Serial, 54, 66, data);
-    SerialUtils::readBytesPortion(rdm6300Serial, 2, 3, data);
+    byte rdm6300Bytes[12];
+    SerialUtils::readBytesPortion(rdm6300Serial, 2, 3, rdm6300Bytes);
 
-    //print data
 
-    for (int i = 0; i < 12; i++) {
-        Serial.println(data[i]);
+
+/*    char asciiData[8];
+    for (int i = 2; i < 10; ++i) {
+        asciiData[i - 2] = rdm6300Bytes[i];
     }
 
-    Serial.println("------");
 
-    /* if (rdm6300Serial.available()) {
-
-         //Discard until the start character to avoid wrong reading
-         while (rdm6300Serial.peek() == 3 || rdm6300Serial.peek() != 2) {
-             Serial.println("Discard!");
-             rdm6300Serial.read();
-         }
-
-         while (rdm6300Serial.peek() == 2 || rdm6300Serial.peek() != 3) {
-             int byte = rdm6300Serial.read();
-             Serial.println(byte);
-         }
-     }*/
-
-    /* if (rdm6300Serial.available() > 0 && rdm6300Serial.peek() == 2) {
-         int byte = rdm6300Serial.read();
-
-         if (byte == 3) {
-
-         }
-
-         Serial.println(byte);
-     } else {
-         //Discard
-
-         while (rdm6300Serial.available() > 0 )
-     }*/
+    Serial.println(convertHexToDecimal(asciiData));*/
 
 }
