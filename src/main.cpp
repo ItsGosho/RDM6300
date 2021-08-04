@@ -20,7 +20,7 @@ byte data[12];
 
 void loop() {
 
-    SerialUtils::readBytesUntil(rdm6300Serial, 2, 3, data);
+    SerialUtils::readBytesUntil(rdm6300Serial, 54, 66, data);
 
     //print data
 

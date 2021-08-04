@@ -10,8 +10,6 @@ namespace SerialUtils {
     template<size_t S>
     void readBytesUntil(SoftwareSerial& softwareSerial, const byte& from, const byte& to, byte (& into)[S]) {
 
-        /*TODO: If data index gets bigger than the S then something like error IDK :D*/
-
         int dataIndex = 0;
         bool frameStarted = false;
         bool successfulRead = false;
@@ -28,6 +26,7 @@ namespace SerialUtils {
 
                 if (softwareSerial.peek() == from && frameStarted) {
                     frameStarted = false;
+                    dataIndex = 0;
                     continue;
                 }
 
@@ -38,15 +37,11 @@ namespace SerialUtils {
                 }
 
                 if (softwareSerial.peek() == to && frameStarted) {
-                    /*    frameStarted = false;
-                        dataIndex = 0;*/
-                    //TODO: return data
                     successfulRead = true;
                     softwareSerial.read();
                     break;
                 }
 
-                //Discard byte
                 softwareSerial.read();
             }
         }
