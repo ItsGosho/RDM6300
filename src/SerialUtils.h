@@ -1,14 +1,14 @@
 #ifndef RDM6300_SERIALUTILS_H
 #define RDM6300_SERIALUTILS_H
 
-#include <SoftwareSerial.h>
+#include <Stream.h>
 
 typedef unsigned char byte;
 
 namespace SerialUtils {
 
     template<size_t S>
-    void readBytesUntil(SoftwareSerial& softwareSerial, const byte& from, const byte& to, byte (& into)[S]) {
+    void readBytesUntil(Stream& serial, const byte& from, const byte& to, byte (& into)[S]) {
 
         int dataIndex = 0;
         bool frameStarted = false;
@@ -16,33 +16,33 @@ namespace SerialUtils {
 
         while (!successfulRead) {
 
-            while (softwareSerial.available()) {
+            while (serial.available()) {
 
-                if (softwareSerial.peek() == from && !frameStarted) {
+                if (serial.peek() == from && !frameStarted) {
                     frameStarted = true;
-                    softwareSerial.read();
+                    serial.read();
                     continue;
                 }
 
-                if (softwareSerial.peek() == from && frameStarted) {
+                if (serial.peek() == from && frameStarted) {
                     frameStarted = false;
                     dataIndex = 0;
                     continue;
                 }
 
-                if (softwareSerial.peek() != from && frameStarted && softwareSerial.peek() != to) {
-                    into[dataIndex] = softwareSerial.read();
+                if (serial.peek() != from && frameStarted && serial.peek() != to) {
+                    into[dataIndex] = serial.read();
                     dataIndex++;
                     continue;
                 }
 
-                if (softwareSerial.peek() == to && frameStarted) {
+                if (serial.peek() == to && frameStarted) {
                     successfulRead = true;
-                    softwareSerial.read();
+                    serial.read();
                     break;
                 }
 
-                softwareSerial.read();
+                serial.read();
             }
         }
     }
