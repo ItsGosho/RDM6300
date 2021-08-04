@@ -12,9 +12,8 @@ namespace SerialUtils {
 
         int dataIndex = 0;
         bool frameStarted = false;
-        bool successfulRead = false;
 
-        while (!successfulRead) {
+        while (true) {
 
             while (serial.available()) {
 
@@ -37,9 +36,8 @@ namespace SerialUtils {
                 }
 
                 if (serial.peek() == to && frameStarted) {
-                    successfulRead = true;
                     serial.read();
-                    break;
+                    return;
                 }
 
                 serial.read();
