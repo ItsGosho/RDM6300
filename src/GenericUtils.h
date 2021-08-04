@@ -21,6 +21,19 @@ namespace GenericUtils {
 
         return result;
     }
+
+    template<size_t S>
+    unsigned long concatCharacters(char (& characters)[S]) {
+
+        unsigned long multiplier = 1;
+        unsigned long result = 0;
+        for (int i = S - 1; i >= 0; i--) {
+            result += (characters[i] - '0') * multiplier;
+            multiplier *= 10;
+        }
+
+        return result;
+    }
 }
 
 #endif //RDM6300_GENERICUTILS_H
