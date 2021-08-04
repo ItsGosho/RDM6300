@@ -8,7 +8,7 @@ typedef unsigned char byte;
 namespace SerialUtils {
 
     template<size_t S>
-    void readBytesPortion(Stream& serial, const byte& from, const byte& to, byte (& into)[S]) {
+    void readBytesPortion(Stream& serial, const byte& startByte, const byte& endByte, byte (& into)[S]) {
 
         size_t dataIndex = 0;
         bool frameStarted = false;
@@ -17,25 +17,27 @@ namespace SerialUtils {
 
             while (serial.available()) {
 
-                if (serial.peek() == from && !frameStarted) {
+                byte currentByte = serial.peek();
+
+                if (currentByte == startByte && !frameStarted) {
                     frameStarted = true;
                     serial.read();
                     continue;
                 }
 
-                if (serial.peek() == from && frameStarted) {
+                if (currentByte == startByte && frameStarted) {
                     frameStarted = false;
                     dataIndex = 0;
                     continue;
                 }
 
-                if (serial.peek() != from && frameStarted && serial.peek() != to) {
+                if (currentByte != startByte && frameStarted && currentByte != endByte) {
                     into[dataIndex] = serial.read();
                     dataIndex++;
                     continue;
                 }
 
-                if (serial.peek() == to && frameStarted) {
+                if (currentByte == endByte && frameStarted) {
                     serial.read();
                     return;
                 }
