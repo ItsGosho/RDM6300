@@ -19,9 +19,14 @@ void setup() {
 
 void loop() {
 
-    //SerialUtils::readBytesPortion(rdm6300Serial, 54, 66, data);
     byte rdm6300Bytes[12];
     SerialUtils::readBytesPortion(rdm6300Serial, 2, 3, rdm6300Bytes);
+
+    /*TODO: Vmesto da gi pulnq, prosto da im se vzimat ot - do*/
+    char data[10];
+    for (int i = 0; i < 10; ++i) {
+        data[i] = rdm6300Bytes[i];
+    }
 
     char versionData[2];
     for (int i = 0; i < 2; ++i) {
@@ -33,10 +38,29 @@ void loop() {
         tagData[i - 2] = rdm6300Bytes[i];
     }
 
+    char checksum[2];
+    for (int i = 10; i < 12; ++i) {
+        checksum[i - 10] = rdm6300Bytes[i];
+    }
+
     Serial.println("Tag:");
     Serial.println(GenericUtils::convertHexToDecimal(tagData));
 
     Serial.println("Version:");
     Serial.println(versionData);
+
+    Serial.println("Checksum:");
+
+    unsigned long checksumData = 0;
+    for (int i = 0; i < 10; i += 2) {
+        char forConversion[2] = {data[i], data[i + 1]};
+
+        checksumData  ^= GenericUtils::convertHexToDecimal(forConversion);
+    }
+
+    unsigned long checksumReceived = GenericUtils::convertHexToDecimal(checksum);
+
+
+   Serial.println(checksumData == checksumReceived ? "Valid" : "Invalid");
 
 }
