@@ -18,6 +18,34 @@ unsigned long pow(const int& number, const int& exponent) {
     return result;
 }
 
+unsigned long convertHexToDecimal(const char& character) {
+
+    unsigned long value = (int) character - 48;
+
+    if (value < 10)
+        return value;
+
+    if (character == 'A')
+        return 10;
+
+    if (character == 'B')
+        return 11;
+
+    if (character == 'C')
+        return 12;
+
+    if (character == 'D')
+        return 13;
+
+    if (character == 'E')
+        return 14;
+
+    if (character == 'F')
+        return 15;
+
+    return value;
+}
+
 template<size_t S>
 unsigned long convertHexToDecimal(char (& hex)[S]) {
 
@@ -25,7 +53,7 @@ unsigned long convertHexToDecimal(char (& hex)[S]) {
     unsigned long result = 0;
 
     for (int i = S - 1; i >= 0; i--) {
-        result += (hex[i] - 48) * pow(16, exponent);
+        result += convertHexToDecimal(hex[i]) * pow(16, exponent);
         exponent++;
     }
 
@@ -46,14 +74,12 @@ void loop() {
     byte rdm6300Bytes[12];
     SerialUtils::readBytesPortion(rdm6300Serial, 2, 3, rdm6300Bytes);
 
-
-
-/*    char asciiData[8];
+    char asciiData[8];
     for (int i = 2; i < 10; ++i) {
         asciiData[i - 2] = rdm6300Bytes[i];
     }
 
 
-    Serial.println(convertHexToDecimal(asciiData));*/
+    Serial.println(convertHexToDecimal(asciiData));
 
 }
