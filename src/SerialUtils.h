@@ -8,9 +8,9 @@ typedef unsigned char byte;
 namespace SerialUtils {
 
     template<size_t S>
-    void readBytesUntil(Stream& serial, const byte& from, const byte& to, byte (& into)[S]) {
+    void readBytesPortion(Stream& serial, const byte& from, const byte& to, byte (& into)[S]) {
 
-        int dataIndex = 0;
+        size_t dataIndex = 0;
         bool frameStarted = false;
 
         while (true) {
