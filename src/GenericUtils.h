@@ -11,10 +11,17 @@ namespace GenericUtils {
 
     template<size_t S>
     unsigned long convertHexToDecimal(const char (& hex)[S]) {
+        const size_t startIndex = 0;
+        const size_t endIndex = S - 1;
+        return convertHexToDecimalRanged(hex, startIndex, endIndex);
+    }
+
+    template<size_t S>
+    unsigned long convertHexToDecimalRanged(const char (& hex)[S], const size_t& startIndex, const size_t& endIndex) {
         size_t exponent = 0;
         unsigned long result = 0;
 
-        for (int i = S - 1; i >= 0; i--) {
+        for (size_t i = endIndex; i >= startIndex && i <= endIndex; i--) {
             result += convertHexToDecimal(hex[i]) * pow(16, exponent);
             exponent++;
         }

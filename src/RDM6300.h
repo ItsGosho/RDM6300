@@ -9,6 +9,15 @@
 #define END_BYTE 3
 #define SERIAL_BAUD_RATE 9600
 
+#define DATA_VERSION_START_INDEX 0
+#define DATA_VERSION_END_INDEX 1
+#define DATA_TAG_START_INDEX 2
+#define DATA_TAG_END_INDEX 9
+#define CHECKSUM_START_INDEX 10
+#define CHECKSUM_END_INDEX 11
+#define DATA_START_INDEX 0
+#define DATA_END_INDEX 9
+
 struct RFIDTag {
 
     unsigned long id;
