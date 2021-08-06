@@ -28,7 +28,7 @@ bool RDM6300::isChecksumValid(const byte (& rdm6300Bytes)[12]) {
         checksumData ^= GenericUtils::convertHexToDecimalRanged(forConversion, 0, 1);
     }
 
-    unsigned long checksumReceived = GenericUtils::convertHexToDecimalRanged(rdm6300Bytes, 10, 11);
+    unsigned long checksumReceived = GenericUtils::convertHexToDecimalRanged(rdm6300Bytes, CHECKSUM_START_INDEX, CHECKSUM_END_INDEX);
 
     return checksumData == checksumReceived;
 }
