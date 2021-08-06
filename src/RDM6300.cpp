@@ -35,8 +35,13 @@ RFIDTag RDM6300::readTag() {
 
     unsigned long version = GenericUtils::concatCharacters(versionData);
     unsigned long id = GenericUtils::convertHexToDecimal(tagId);
+    bool isChecksumValid = this->isChecksumValid(data, checksum);
 
-    /*TODO Refactor into its own separate func*/
+    return RFIDTag{id, version, isChecksumValid};
+}
+
+bool RDM6300::isChecksumValid(const char (& data)[10], const char (& checksum)[2]) {
+
     unsigned long checksumData = 0;
     for (int i = 0; i < 10; i += 2) {
         char forConversion[2] = {data[i], data[i + 1]};
@@ -45,7 +50,6 @@ RFIDTag RDM6300::readTag() {
     }
 
     unsigned long checksumReceived = GenericUtils::convertHexToDecimal(checksum);
-    bool isChecksumValid = checksumData == checksumReceived;
 
-    return RFIDTag{id, version, isChecksumValid};
+    return checksumData == checksumReceived;
 }

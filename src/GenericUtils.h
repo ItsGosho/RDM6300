@@ -10,7 +10,7 @@ namespace GenericUtils {
     unsigned long convertHexToDecimal(const char& character);
 
     template<size_t S>
-    unsigned long convertHexToDecimal(char (& hex)[S]) {
+    unsigned long convertHexToDecimal(const char (& hex)[S]) {
         size_t exponent = 0;
         unsigned long result = 0;
 
@@ -23,7 +23,7 @@ namespace GenericUtils {
     }
 
     template<size_t S>
-    unsigned long concatCharacters(char (& characters)[S]) {
+    unsigned long concatCharacters(const char (& characters)[S]) {
 
         unsigned long multiplier = 1;
         unsigned long result = 0;

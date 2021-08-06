@@ -29,6 +29,10 @@ public:
     RDM6300(const short& txPin, const short& rxPin);
 
     RFIDTag readTag();
+
+private:
+
+    bool isChecksumValid(const char (& data)[10],const char (&checksum)[2]);
 };
 
 
