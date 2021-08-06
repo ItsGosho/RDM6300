@@ -41,7 +41,7 @@ public:
 
 private:
 
-    bool isChecksumValid(const char (& data)[10],const char (&checksum)[2]);
+    bool isChecksumValid(const byte (& rdm6300Bytes)[12]);
 };
 
 
