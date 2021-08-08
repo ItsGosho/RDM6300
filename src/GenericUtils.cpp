@@ -1,38 +1,57 @@
 #include "GenericUtils.h"
 
-unsigned long GenericUtils::pow(const int& number, const int& exponent) {
+/**
+ * @param base The base
+ * @param exponent The exponent for the base
+ * @return The given base raised to the given exponent.
+ */
+unsigned long GenericUtils::pow(const int& base, const int& exponent) {
 
     unsigned long result = 1;
 
     for (int i = 0; i < exponent; ++i)
-        result *= number;
+        result *= base;
 
     return result;
 }
 
-unsigned long GenericUtils::convertHexToDecimal(const char& character) {
+/**
+ * Will convert a character representation of HEX to its decimal form.
+ *
+ * Example:
+ *
+ * ASCI DECIMAL
+ * '2' -> 2
+ * '9' -> 9
+ * 'A' -> 10
+ * 'E' -> 14
+ *
+ * @param hex The character to be converted to HEX
+ * @return The converted character
+ */
+unsigned long GenericUtils::convertHexToDecimal(const char& hex) {
 
-    unsigned long value = (int) character - 48;
+    unsigned long value = (int) hex - 48;
 
     if (value < 10)
         return value;
 
-    if (character == 'A')
+    if (hex == 'A')
         return 10;
 
-    if (character == 'B')
+    if (hex == 'B')
         return 11;
 
-    if (character == 'C')
+    if (hex == 'C')
         return 12;
 
-    if (character == 'D')
+    if (hex == 'D')
         return 13;
 
-    if (character == 'E')
+    if (hex == 'E')
         return 14;
 
-    if (character == 'F')
+    if (hex == 'F')
         return 15;
 
     return value;
