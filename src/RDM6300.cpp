@@ -12,11 +12,7 @@ RFIDTag RDM6300::readTag() {
     byte rdm6300Bytes[12];
     SerialUtils::readBytesPortion(this->serial, START_BYTE, END_BYTE, rdm6300Bytes);
 
-    unsigned long version = GenericUtils::concatCharactersRanged(rdm6300Bytes, DATA_VERSION_START_INDEX, DATA_VERSION_END_INDEX);
-    unsigned long id = GenericUtils::convertHexToDecimalRanged(rdm6300Bytes, DATA_TAG_START_INDEX, DATA_TAG_END_INDEX);
-    bool isChecksumValid = this->isChecksumValid(rdm6300Bytes);
-
-    return RFIDTag{id, version, isChecksumValid, false};
+    return this->convertReadData(rdm6300Bytes, false);
 }
 
 RFIDTag RDM6300::readTag(const unsigned long& readTimeoutMS) {
@@ -24,9 +20,13 @@ RFIDTag RDM6300::readTag(const unsigned long& readTimeoutMS) {
     byte rdm6300Bytes[12];
     bool hasTimedOut = SerialUtils::readBytesPortion(this->serial, START_BYTE, END_BYTE, rdm6300Bytes, readTimeoutMS);
 
-    if (hasTimedOut) {
+    return this->convertReadData(rdm6300Bytes, hasTimedOut);
+}
+
+RFIDTag RDM6300::convertReadData(const byte (& rdm6300Bytes)[12], const bool& hasReadTimedOut) {
+
+    if (hasReadTimedOut)
         return RFIDTag{0, 0, false, true};
-    }
 
     unsigned long version = GenericUtils::concatCharactersRanged(rdm6300Bytes, DATA_VERSION_START_INDEX, DATA_VERSION_END_INDEX);
     unsigned long id = GenericUtils::convertHexToDecimalRanged(rdm6300Bytes, DATA_TAG_START_INDEX, DATA_TAG_END_INDEX);
@@ -34,7 +34,6 @@ RFIDTag RDM6300::readTag(const unsigned long& readTimeoutMS) {
 
     return RFIDTag{id, version, isChecksumValid, false};
 }
-
 
 /**
  * Will compare the calculated checksum from us based on the data with the received one from the device for comparison

@@ -45,6 +45,7 @@ private:
 
     unsigned long calculateChecksum(const byte (& rdm6300Bytes)[12]);
     bool isChecksumValid(const byte (& rdm6300Bytes)[12]);
+    RFIDTag convertReadData(const byte (& rdm6300Bytes)[12],const bool& hasReadTimedOut);
 };
 
 
