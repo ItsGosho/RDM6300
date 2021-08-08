@@ -60,9 +60,9 @@ namespace SerialUtils {
 
         while (true) {
 
-            bool isSuccessfulRead = readAvailablePortionBytes(serial, startByte, endByte, into, frameStarted, dataIndex);
+            bool isPortionCompleted = readAvailablePortionBytes(serial, startByte, endByte, into, frameStarted, dataIndex);
 
-            if (isSuccessfulRead)
+            if (isPortionCompleted)
                 return false;
 
             unsigned long totalReadTimeMS = millis() - readStartTimeMS;
