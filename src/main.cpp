@@ -14,10 +14,11 @@ void setup() {
 
 void loop() {
 
-    RFIDTag rfidTag = rdm6300.readTag();
+    RFIDTag rfidTag = rdm6300.readTag(1500);
 
-    serial_printf(Serial, "Version: %l, Id: %l, Checksum: %s\n",
+    serial_printf(Serial, "Version: %l, Id: %l, Checksum: %s, Read Timed Out: %s\n",
                   rfidTag.version,
                   rfidTag.id,
-                  rfidTag.isChecksumValid ? "true": "false");
+                  rfidTag.isChecksumValid ? "true": "false",
+                  rfidTag.isReadTimedOut ? "true": "false");
 }

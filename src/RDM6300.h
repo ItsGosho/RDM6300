@@ -39,7 +39,7 @@ public:
     RDM6300(const short& txPin, const short& rxPin);
 
     RFIDTag readTag();
-    RFIDTag RDM6300::readTag(const unsigned int& timeoutMS);
+    RFIDTag RDM6300::readTag(const unsigned long& readTimeoutMS);
 
 private:
 

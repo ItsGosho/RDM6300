@@ -49,7 +49,7 @@ namespace SerialUtils {
 
     /*TODO: Documentation with examples and fort the above one too*/
     template<size_t S>
-    bool readBytesPortion(Stream& serial, const byte& startByte, const byte& endByte, byte (& into)[S], const unsigned long& timeoutMS) {
+    bool readBytesPortion(Stream& serial, const byte& startByte, const byte& endByte, byte (& into)[S], const unsigned long& readTimeoutMS) {
 
         size_t dataIndex = 0;
         bool frameStarted = false;
@@ -90,7 +90,7 @@ namespace SerialUtils {
 
             unsigned long totalReadTimeMS = millis() - readStartTimeMS;
 
-            if(totalReadTimeMS >= timeoutMS)
+            if(totalReadTimeMS >= readTimeoutMS)
                 return true;
         }
     }
