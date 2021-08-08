@@ -14,7 +14,7 @@ void setup() {
 
 void loop() {
 
-    RFIDTag rfidTag = rdm6300.readTag(1500);
+    RFIDTag rfidTag = rdm6300.readTag();
 
     serial_printf(Serial, "Version: %l, Id: %l, Checksum: %s, Read Timed Out: %s\n",
                   rfidTag.version,

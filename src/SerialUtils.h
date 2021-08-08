@@ -7,45 +7,6 @@ typedef unsigned char byte;
 
 namespace SerialUtils {
 
-    template<size_t S>
-    void readBytesPortion(Stream& serial, const byte& startByte, const byte& endByte, byte (& into)[S]) {
-
-        size_t dataIndex = 0;
-        bool frameStarted = false;
-
-        while (true) {
-
-            while (serial.available()) {
-
-                byte currentByte = serial.peek();
-
-                if (currentByte == startByte && !frameStarted) {
-                    frameStarted = true;
-                    serial.read();
-                    continue;
-                }
-
-                if (currentByte == startByte && frameStarted) {
-                    frameStarted = false;
-                    dataIndex = 0;
-                    continue;
-                }
-
-                if (currentByte != startByte && frameStarted && currentByte != endByte) {
-                    into[dataIndex] = serial.read();
-                    dataIndex++;
-                    continue;
-                }
-
-                if (currentByte == endByte && frameStarted) {
-                    serial.read();
-                    return;
-                }
-
-                serial.read();
-            }
-        }
-    }
 
     /**
      * Will read a specific portion of the bytes that have been received on the serial.
@@ -67,6 +28,25 @@ namespace SerialUtils {
      * @param startByte The start byte of the sequence
      * @param endByte The end byte of the sequence
      * @param into The array, which will be filled with the read data
+     */
+    template<size_t S>
+    void readBytesPortion(Stream& serial, const byte& startByte, const byte& endByte, byte (& into)[S]) {
+
+        size_t dataIndex = 0;
+        bool frameStarted = false;
+
+        while (true) {
+
+            bool isSuccessfulRead = readAvailablePortionBytes(serial, startByte, endByte, into, frameStarted, dataIndex);
+
+            if (isSuccessfulRead)
+                break;
+        }
+    }
+
+    /**
+     * Same as reading a bytes portion, but with timeout.
+     *
      * @param readTimeoutMS The max time for finding the sequence
      * @return If the read has timed out.
      */
@@ -80,41 +60,52 @@ namespace SerialUtils {
 
         while (true) {
 
-            while (serial.available()) {
+            bool isSuccessfulRead = readAvailablePortionBytes(serial, startByte, endByte, into, frameStarted, dataIndex);
 
-                byte currentByte = serial.peek();
-
-                if (currentByte == startByte && !frameStarted) {
-                    frameStarted = true;
-                    serial.read();
-                    continue;
-                }
-
-                if (currentByte == startByte && frameStarted) {
-                    frameStarted = false;
-                    dataIndex = 0;
-                    continue;
-                }
-
-                if (currentByte != startByte && frameStarted && currentByte != endByte) {
-                    into[dataIndex] = serial.read();
-                    dataIndex++;
-                    continue;
-                }
-
-                if (currentByte == endByte && frameStarted) {
-                    serial.read();
-                    return false;
-                }
-
-                serial.read();
-            }
+            if (isSuccessfulRead)
+                return false;
 
             unsigned long totalReadTimeMS = millis() - readStartTimeMS;
 
             if (totalReadTimeMS >= readTimeoutMS)
                 return true;
         }
+    }
+
+    template<size_t S>
+    bool readAvailablePortionBytes(Stream& serial, const byte& startByte, const byte& endByte, byte (& into)[S], bool& frameStarted, size_t& dataIndex) {
+
+        while (serial.available()) {
+
+            byte currentByte = serial.peek();
+
+            if (currentByte == startByte && !frameStarted) {
+                frameStarted = true;
+                serial.read();
+                continue;
+            }
+
+            if (currentByte == startByte && frameStarted) {
+                frameStarted = false;
+                dataIndex = 0;
+                continue;
+            }
+
+            if (currentByte != startByte && frameStarted && currentByte != endByte) {
+                into[dataIndex] = serial.read();
+                dataIndex++;
+                continue;
+            }
+
+            if (currentByte == endByte && frameStarted) {
+                serial.read();
+                return true;
+            }
+
+            serial.read();
+        }
+
+        return false;
     }
 }
 
