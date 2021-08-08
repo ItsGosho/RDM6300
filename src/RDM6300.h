@@ -23,6 +23,7 @@ struct RFIDTag {
     unsigned long id;
     unsigned long version;
     bool isChecksumValid;
+    bool isReadTimedOut;
 
 };
 
@@ -38,6 +39,7 @@ public:
     RDM6300(const short& txPin, const short& rxPin);
 
     RFIDTag readTag();
+    RFIDTag RDM6300::readTag(const unsigned int& timeoutMS);
 
 private:
 

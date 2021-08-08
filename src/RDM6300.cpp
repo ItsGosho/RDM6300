@@ -16,8 +16,21 @@ RFIDTag RDM6300::readTag() {
     unsigned long id = GenericUtils::convertHexToDecimalRanged(rdm6300Bytes, DATA_TAG_START_INDEX, DATA_TAG_END_INDEX);
     bool isChecksumValid = this->isChecksumValid(rdm6300Bytes);
 
+    return RFIDTag{id, version, isChecksumValid, false};
+}
+
+RFIDTag RDM6300::readTag(const unsigned int& timeoutMS) {
+
+    byte rdm6300Bytes[12];
+    SerialUtils::readBytesPortion(this->serial, START_BYTE, END_BYTE, rdm6300Bytes);
+
+    unsigned long version = GenericUtils::concatCharactersRanged(rdm6300Bytes, DATA_VERSION_START_INDEX,DATA_VERSION_END_INDEX);
+    unsigned long id = GenericUtils::convertHexToDecimalRanged(rdm6300Bytes, DATA_TAG_START_INDEX, DATA_TAG_END_INDEX);
+    bool isChecksumValid = this->isChecksumValid(rdm6300Bytes);
+
     return RFIDTag{id, version, isChecksumValid};
 }
+
 
 /**
  * Will compare the calculated checksum from us based on the data with the received one from the device for comparison
