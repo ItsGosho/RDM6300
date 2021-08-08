@@ -7,6 +7,11 @@ RDM6300::RDM6300(const short& txPin, const short& rxPin) : txPin(txPin), rxPin(r
     this->serial.begin(SERIAL_BAUD_RATE);
 }
 
+/**
+ * Will read a tag from the RDM6300, but will block until a tag is read.
+ *
+ * @return The result from the read
+ */
 RFIDTag RDM6300::readTag() {
 
     byte rdm6300Bytes[12];
@@ -15,6 +20,12 @@ RFIDTag RDM6300::readTag() {
     return this->convertReadData(rdm6300Bytes, false);
 }
 
+/**
+ * Will read a tag from the RDM6300, but with a timeout.
+ *
+ * @param readTimeoutMS The maximum time for reading a tag from the RDM6300 in milliseconds
+ * @return The result from the read
+ */
 RFIDTag RDM6300::readTag(const unsigned long& readTimeoutMS) {
 
     byte rdm6300Bytes[12];
@@ -23,6 +34,13 @@ RFIDTag RDM6300::readTag(const unsigned long& readTimeoutMS) {
     return this->convertReadData(rdm6300Bytes, hasTimedOut);
 }
 
+/**
+ * Will convert the read bytes from the RDM6300 into their respective data.
+ *
+ * @param rdm6300Bytes The read bytes from the RDM6300
+ * @param hasReadTimedOut If the reading of the bytes has timed out
+ * @return The result from the read
+ */
 RFIDTag RDM6300::convertReadData(const byte (& rdm6300Bytes)[12], const bool& hasReadTimedOut) {
 
     if (hasReadTimedOut)
