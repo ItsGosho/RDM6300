@@ -1,7 +1,7 @@
 # RDM6300
 Arduino library for the RDM6300 125kHZ RFID reader
 
-<img src="RDM6300-component.jpg" width="150px" height=150px>
+<img src="RDM6300-component.jpg" width="200px" height=200px>
 
 ##### Example:
 
